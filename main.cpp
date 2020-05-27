@@ -29,10 +29,14 @@ int main(){
 	
 	string line;
 	Instance *temp;
+	double max = 0;
 	while(getline(dat, line)){
 		stringstream ss(line);
 		
 		while(ss >> val){
+			if(val > max){
+				max = val;
+			}
 			data.push_back(val);
 		}
 		temp = new Instance(data);
@@ -54,8 +58,11 @@ int main(){
 
 	cout << "Please wait while I normalize the data.. ";
 
+
 	//normalize data here
 	cout << "Done!" << endl << endl;
+
+	cout << "max: " << max << endl;
 
 	cout << "Type the number of the algorithm you want to run." << endl;
 	cout << "1) Forward selection" << endl << "2) Backward Elimination" << endl << endl;
