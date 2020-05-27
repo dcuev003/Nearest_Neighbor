@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "instance.cpp"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ int main(){
 
 	double val;
 	vector <double> data;
+	vector <Instance> train;
 
 	string fname; //variable for file name
 	int choice;
@@ -26,19 +28,26 @@ int main(){
 	dat.open(fname.c_str());
 	
 	string line;
-
-		getline(dat, line);
+	Instance *temp;
+	while(getline(dat, line)){
 		stringstream ss(line);
-
+		
 		while(ss >> val){
 			data.push_back(val);
 		}
+		temp = new Instance(data);
+		ss.clear();
+		data.clear();
+		train.push_back(*temp);
+		delete temp;
+	}
 		
 	dat.close();
 	
 	cout << endl;
-	for(int i = 0; i < data.size(); i++){
-		cout << data.at(i) << " ";
+	
+	for(int i = 0; i < train.size(); i++){
+		train.at(i).print();
 	}
 	
 	cout << endl;
