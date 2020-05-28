@@ -15,16 +15,20 @@ void normalize(vector<Instance> temp){
 	double stdDev = 0.0;
 	double var = 0.0;
 	double sz = static_cast<double>(temp.size());
+
 	for(int i = 0; i < temp.at(0).features.size(); i++){
 		for(int j = 0; j < temp.size(); j++){
 			sum += temp.at(j).features.at(i); 	
 		}
+		cout << endl << "sum: " << sum << endl;
 		mean = sum/sz;
+		cout << "mean: " << mean << endl;
 		for(int k = 0; k < temp.size(); k++){
 			var += pow(temp.at(k).features.at(i) - mean, 2);
 		}
 		var = var/sz;
 		stdDev = sqrt(var);
+		cout <<  "stdDev: " << stdDev << endl;
 		for(int f = 0; f < temp.size(); f++){
 			temp.at(f).features.at(i) = ((temp.at(f).features.at(i) - mean)/stdDev);
 		}
@@ -78,6 +82,7 @@ int main(){
 	cout << "Please wait while I normalize the data.. ";
 
 	normalize(train);
+
 	cout << "Done!" << endl << endl;
 
 	for(int i = 0; i < train.size(); i++){

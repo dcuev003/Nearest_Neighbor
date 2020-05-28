@@ -29,8 +29,9 @@ class Instance{
 		}
 
 		void print(){
-			for(int i = 0; i < inst.size(); i++){
-				cout << inst.at(i) << " ";
+			cout << id << " ";
+			for(int i = 0; i < features.size(); i++){
+				cout << features.at(i) << " ";
 			}
 			cout << endl;
 		}
