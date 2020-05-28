@@ -70,23 +70,21 @@ int main(){
 		train.push_back(*temp);
 		delete temp;
 	}
-		
+			
 	dat.close();
-	
-	cout << endl;
-	
-	for(int i = 0; i < train.size(); i++){
-		train.at(i).print();
-	}
 	
 	cout << endl;
 
 	cout << "Please wait while I normalize the data.. ";
 
-
-	//normalize data here
+	normalize(train);
 	cout << "Done!" << endl << endl;
 
+	for(int i = 0; i < train.size(); i++){
+		train.at(i).print();
+	}
+
+	cout << endl;
 	cout << "Type the number of the algorithm you want to run." << endl;
 	cout << "1) Forward selection" << endl << "2) Backward Elimination" << endl << endl;
 
