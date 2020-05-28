@@ -4,16 +4,35 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cmath>
 #include "instance.cpp"
 
 using namespace std;
 
 void normalize(vector<Instance> temp){
-	
-	for(int i = 0; i < temp.size(); i++){
-		temp.at(i).features.at(i) = 2;
-	}
-			
+	double mean = 0.0;
+	double sum = 0.0;
+	double stdDev = 0.0;
+	double var = 0.0;
+	double sz = static_cast<double>(temp.size());
+	for(int i = 0; i < temp.at(0).features.size(); i++){
+		for(int j = 0; j < temp.size(); j++){
+			sum += temp.at(j).features.at(i); 	
+		}
+		mean = sum/sz;
+		for(int k = 0; k < temp.size(); k++){
+			var += pow(temp.at(k).features.at(i) - mean, 2);
+		}
+		var = var/sz;
+		stdDev = sqrt(var);
+		for(int f = 0; f < temp.size(); f++){
+			temp.at(f).features.at(i) = ((temp.at(f).features.at(i) - mean)/stdDev);
+		}
+		mean = 0.0;
+		sum = 0.0;
+		stdDev = 0.0;
+		var = 0.0;
+	}   
 	
 }
 
