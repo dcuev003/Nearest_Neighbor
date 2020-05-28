@@ -8,6 +8,15 @@
 
 using namespace std;
 
+void normalize(vector<Instance> temp){
+	
+	for(int i = 0; i < temp.size(); i++){
+		temp.at(i).features.at(i) = 2;
+	}
+			
+	
+}
+
 int main(){
 	
 	cout << "Welcome to Daniel Cueva's Feature Selection Algorithm." << endl;
@@ -34,9 +43,6 @@ int main(){
 		stringstream ss(line);
 		
 		while(ss >> val){
-			if(val > max){
-				max = val;
-			}
 			data.push_back(val);
 		}
 		temp = new Instance(data);
@@ -62,8 +68,6 @@ int main(){
 	//normalize data here
 	cout << "Done!" << endl << endl;
 
-	cout << "max: " << max << endl;
-
 	cout << "Type the number of the algorithm you want to run." << endl;
 	cout << "1) Forward selection" << endl << "2) Backward Elimination" << endl << endl;
 
@@ -75,5 +79,5 @@ int main(){
 	
 
 
-	return -1;
+	return 1;
 }

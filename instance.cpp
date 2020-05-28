@@ -12,6 +12,7 @@ class Instance{
 
 	public:
 		vector<double> inst;
+		vector<double> features;
 		int id;
 
 
@@ -22,6 +23,9 @@ class Instance{
 		Instance(vector<double> v ){
 			inst = v;
 			id = inst.at(0);
+			for(int i = 1; i < inst.size(); i++){
+				features.push_back(inst.at(i));
+			}
 		}
 
 		void print(){
