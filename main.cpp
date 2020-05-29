@@ -44,7 +44,7 @@ vector<Instance> normalize(vector<Instance> temp){
 	
 }
 
-int nearestNeighbor(vector<double> featureSet, vector<int> fnumber){
+int nearestNeighbor(vector<Instance> t, vector<double> featureSet, vector<int> fnumber){
 		
 	double min = DBL_MAX;
 	double dist = 0;
@@ -52,7 +52,7 @@ int nearestNeighbor(vector<double> featureSet, vector<int> fnumber){
 	for(int i = 0; i < featureSet.size(); i++){
 		
 	
-
+	}
 
 	return 0;
 }
@@ -78,7 +78,7 @@ int main(){
 	
 	string line;
 	Instance *temp;
-	double max = 0;
+	
 	while(getline(dat, line)){
 		stringstream ss(line);
 		
@@ -94,6 +94,7 @@ int main(){
 			
 	dat.close();
 	
+	cout << "This dataset has " << train.at(0).features.size() << " features, with " << train.size() << " instances." << endl;
 	cout << endl;
 
 	cout << "Please wait while I normalize the data.. ";
