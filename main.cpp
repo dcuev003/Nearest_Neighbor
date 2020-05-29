@@ -44,15 +44,23 @@ vector<Instance> normalize(vector<Instance> temp){
 	
 }
 
-int nearestNeighbor(vector<Instance> t, vector<double> featureSet, vector<int> fnumber){
+int nearestNeighbor(vector<double> featureSet, vector<Instance> train){
 		
 	double min = DBL_MAX;
 	double dist = 0;
+	int id;
 	
-	for(int i = 0; i < featureSet.size(); i++){
-		
-	
+	for(int i = 0; i < train.size(); i++){
+		for(int j = 0; j < featureSet.size(); j++){
+			dist += pow((train.at(i).features.at(j) - featureSet.at(j)),2); 
+		}
+		if(dist < min){
+			min = dist;
+			id = train.at(i).id;
+		}
+		dist = 0;	
 	}
+	return id;
 
 	return 0;
 }
