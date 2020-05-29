@@ -47,33 +47,52 @@ vector<Instance> normalize(vector<Instance> temp){
 int nearestNeighbor(int out, vector<double> featureSet, vector<Instance> train, vector<int> fnum){
 		
 	double min = DBL_MAX;
-	double dist = 0;
+	double dist = 0.0;
 	int id;
 	
 	for(int i = 0; i < train.size(); i++){
-		for(int j = 0; j < featureSet.size(); j++){
-			dist += pow((train.at(i).features.at(fnum.at(j)) - featureSet.at(j)),2); 
+		if(i != out){
+			for(int j = 0; j < featureSet.size(); j++){
+				dist += pow((train.at(i).features.at(fnum.at(j)) - featureSet.at(j)),2); 
+			}
+			if(dist < min){
+				min = dist;
+				id = train.at(i).id;
+			}
 		}
-		if(dist < min){
-			min = dist;
-			id = train.at(i).id;
-		}
-		dist = 0;	
+		dist = 0.0;
+			
 	}
 	return id;
-
-	return 0;
 }
 
 double leaveOneOut(vector<double> fset, vector<Instance> train, vector<int> fnumber){
 	vector<double> temp; //variable to hold current features
 	double correct = 0;
 	double sz = static_cast<double>(train.size());
+	double accuracy;
+	
 	for(int i = 0; i < train.size(); i++){
 		for(int j = 0; j < fnumber.size(); j++){
 			temp.push_back(train.at(i).features.at(fnumber.at(j)));
 		}
-		if(nearestNeighbor(i, temp
+		if(nearestNeighbor(i, temp, train, fnumber) == train.at(i).id){
+			correct++;
+		}
+	}
+	
+	accuracy = correct/sz;
+
+	cout << "using feature(s) {"; 
+	for(int i = 0; i < fnumber.size(); i++){
+		cout << fnumber.at(i);
+		if(i != fnumber.size()-1){
+			cout << ",";
+		}
+	}
+	cout << "} accuracy is " << accuracy << "%" << endl;
+
+	return accuracy;
 		
 }
 
@@ -143,12 +162,8 @@ int main(){
 
 	cin >> choice;
 	cout << "Running nearest neighbor with features, using leaving-one-out evaluation";
-	cout << endl;
-
-	leaveOneOut(train.at(97).features, train);	
+	cout << endl;	
 	
 	
-
-
 	return 1;
 }
