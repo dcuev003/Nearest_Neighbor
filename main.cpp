@@ -65,6 +65,11 @@ int nearestNeighbor(vector<double> featureSet, vector<Instance> train){
 	return 0;
 }
 
+void leaveOneOut(vector<double> fset, vector<Instance> train){
+	cout << nearestNeighbor(fset, train);
+
+}
+
 int main(){
 	
 	cout << "Welcome to Daniel Cueva's Feature Selection Algorithm." << endl;
@@ -105,6 +110,15 @@ int main(){
 	cout << "This dataset has " << train.at(0).features.size() << " features, with " << train.size() << " instances." << endl;
 	cout << endl;
 
+	/*cout << "testing nearest neighbor" << endl;
+	vector<double> f;
+	f.push_back(3.64);
+	f.push_back(3.51);
+	f.push_back(3.55);
+	f.push_back(3.13);
+
+	cout << "the nearest neighbor is: " << nearestNeighbor(f, train) << endl;*/
+
 	cout << "Please wait while I normalize the data.. ";
 
 	train = normalize(train);
@@ -121,8 +135,10 @@ int main(){
 
 
 	cin >> choice;
-	cout << "Running nearest neighbor with x features, using leaving-one-out evaluation";
+	cout << "Running nearest neighbor with features, using leaving-one-out evaluation";
 	cout << endl;
+
+	
 	
 	
 
