@@ -6,38 +6,55 @@
 #include <sstream>
 #include <cmath>
 #include "instance.cpp"
-
+#include <algorithm>
+#include <float.h>
 using namespace std;
 
-void normalize(vector<Instance> temp){
+vector<Instance> normalize(vector<Instance> temp){
 	double mean = 0.0;
 	double sum = 0.0;
 	double stdDev = 0.0;
 	double var = 0.0;
 	double sz = static_cast<double>(temp.size());
-
+	
+	vector<Instance> ret = temp;
 	for(int i = 0; i < temp.at(0).features.size(); i++){
 		for(int j = 0; j < temp.size(); j++){
 			sum += temp.at(j).features.at(i); 	
 		}
-		cout << endl << "sum: " << sum << endl;
+		//cout << endl << "sum: " << sum << endl;
 		mean = sum/sz;
-		cout << "mean: " << mean << endl;
+		//cout << "mean: " << mean << endl;
 		for(int k = 0; k < temp.size(); k++){
 			var += pow(temp.at(k).features.at(i) - mean, 2);
 		}
 		var = var/sz;
 		stdDev = sqrt(var);
-		cout <<  "stdDev: " << stdDev << endl;
+		//cout <<  "stdDev: " << stdDev << endl;
 		for(int f = 0; f < temp.size(); f++){
-			temp.at(f).features.at(i) = ((temp.at(f).features.at(i) - mean)/stdDev);
+			ret.at(f).features.at(i) = ((ret.at(f).features.at(i) - mean)/stdDev);
 		}
 		mean = 0.0;
 		sum = 0.0;
 		stdDev = 0.0;
 		var = 0.0;
-	}   
+	}
+
+	return ret;   
 	
+}
+
+int nearestNeighbor(vector<double> featureSet, vector<int> fnumber){
+		
+	double min = DBL_MAX;
+	double dist = 0;
+	
+	for(int i = 0; i < featureSet.size(); i++){
+		
+	
+
+
+	return 0;
 }
 
 int main(){
@@ -81,7 +98,7 @@ int main(){
 
 	cout << "Please wait while I normalize the data.. ";
 
-	normalize(train);
+	train = normalize(train);
 
 	cout << "Done!" << endl << endl;
 
