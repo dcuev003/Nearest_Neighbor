@@ -44,7 +44,7 @@ vector<Instance> normalize(vector<Instance> temp){
 	
 }
 
-int nearestNeighbor(vector<double> featureSet, vector<Instance> train){
+int nearestNeighbor(int out, vector<double> featureSet, vector<Instance> train, vector<int> fnum){
 		
 	double min = DBL_MAX;
 	double dist = 0;
@@ -52,7 +52,7 @@ int nearestNeighbor(vector<double> featureSet, vector<Instance> train){
 	
 	for(int i = 0; i < train.size(); i++){
 		for(int j = 0; j < featureSet.size(); j++){
-			dist += pow((train.at(i).features.at(j) - featureSet.at(j)),2); 
+			dist += pow((train.at(i).features.at(fnum.at(j)) - featureSet.at(j)),2); 
 		}
 		if(dist < min){
 			min = dist;
@@ -65,9 +65,16 @@ int nearestNeighbor(vector<double> featureSet, vector<Instance> train){
 	return 0;
 }
 
-void leaveOneOut(vector<double> fset, vector<Instance> train){
-	cout << nearestNeighbor(fset, train);
-
+double leaveOneOut(vector<double> fset, vector<Instance> train, vector<int> fnumber){
+	vector<double> temp; //variable to hold current features
+	double correct = 0;
+	double sz = static_cast<double>(train.size());
+	for(int i = 0; i < train.size(); i++){
+		for(int j = 0; j < fnumber.size(); j++){
+			temp.push_back(train.at(i).features.at(fnumber.at(j)));
+		}
+		if(nearestNeighbor(i, temp
+		
 }
 
 int main(){
@@ -138,7 +145,7 @@ int main(){
 	cout << "Running nearest neighbor with features, using leaving-one-out evaluation";
 	cout << endl;
 
-	
+	leaveOneOut(train.at(97).features, train);	
 	
 	
 
