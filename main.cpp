@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <cmath>
+#include <iomanip>
 #include "instance.cpp"
 #include <algorithm>
 #include <float.h>
@@ -68,7 +69,7 @@ int nearestNeighbor(int out, vector<double> featureSet, vector<Instance> train, 
 
 double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 	vector<double> temp; //variable to hold current features
-	double correct = 0;
+	double correct = 0.0;
 	double sz = static_cast<double>(train.size());
 	double accuracy;
 	
@@ -83,20 +84,46 @@ double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 	}
 	accuracy = (correct/sz)*100.000;
 
-	cout << "using feature(s) {"; 
+	cout << "Using feature(s) {"; 
 	for(int i = 0; i < fnumber.size(); i++){
 		cout << fnumber.at(i)+1;
 		if(i != fnumber.size()-1){
 			cout << ",";
 		}
 	}
-	cout << "} accuracy is " << accuracy << "%" << endl;
+	cout << "} accuracy is " << setprecision(4) << accuracy << "%" << endl;
 
 	return accuracy;
 		
 }
 
-void 
+void forwardSelection(vector<Instance> instances){
+	vector<int> feat;
+	int siz = instances.at(0).features.size();
+	double max = 0;
+	double tmax;
+	double temp;
+	int best;
+
+	cout << "Running nearest neighbor with all features and leave-one-out evaluation.";
+	for(int i = 0; i < siz; i++){
+		feat.push_back(i);
+	}
+	tmax = leaveOneOut(instances, feat);
+	feat.clear();
+	cout << endl << "Beginning search." << endl << endl;
+	for(int i = 0; i < siz; i++){
+		feat.push_back(i);
+		temp = leaveOneOut(instances,feat);
+		if(temp > max){
+			max = temp;
+			best = i;
+		}
+		feat.pop_back();
+	}
+	cout << endl << "Feature set {" << best+1 << "} was best, accuracy is " << max << "%" << endl;
+	
+} 
 
 int main(){
 	
@@ -158,16 +185,9 @@ int main(){
 
 
 	cin >> choice;
-	cout << "Running nearest neighbor with features, using leaving-one-out evaluation";
 	cout << endl;
 
-	vector<int> f;
-	f.push_back(0);
-	f.push_back(14);
-	f.push_back(26);
-
-	leaveOneOut(train, f);
-	
+	forwardSelection(train);
 	
 	return 1;
 }
