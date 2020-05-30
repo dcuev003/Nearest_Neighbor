@@ -95,6 +95,7 @@ double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 void forwardSelection(vector<Instance> instances){
 	vector<int> feat;
 	vector<int> bestFeat;
+	vector<int> trueFeat;
 	int siz = instances.at(0).features.size();
 	double max = 0;
 	double temp;
@@ -115,13 +116,14 @@ void forwardSelection(vector<Instance> instances){
 				feat.pop_back();
 			}
 		}
+		bestFeat.push_back(best);
 		if(curMax > max){
 			max = curMax;
+			trueFeat = bestFeat;
 		}
 		else{
 			cout << "(Warning, Accuracy has decreased! Continue searching in case of local maxima)" << endl;
 		}
-		bestFeat.push_back(best);
 		feat.clear();
 		feat = bestFeat;
 		cout << "Feature set {";
@@ -133,6 +135,14 @@ void forwardSelection(vector<Instance> instances){
 		}
 		cout << "} was best, accuracy is " << curMax << "%" << endl << endl;	
 	}
+	cout << "Finished Search!! The best feature subset is {";
+	for(int l = 0; l < trueFeat.size(); l++){
+        	cout << trueFeat.at(l) + 1;
+        	if(l != trueFeat.size()-1){
+                	cout << ",";
+                }
+        }
+	cout << "}, which has an accuracy of " << max << "%." << endl;
 } 
 
 int main(){
