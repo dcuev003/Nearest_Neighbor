@@ -45,44 +45,39 @@ vector<Instance> normalize(vector<Instance> temp){
 	
 }
 
-int nearestNeighbor(int out, vector<double> featureSet, vector<Instance> train, vector<int> fnum){
+int nearestNeighbor(int out, vector<Instance> train, vector<int> fnum){
 		
 	double min = DBL_MAX;
 	double dist = 0.0;
-	int id;
+	int clsf; //classification
 	
 	for(int i = 0; i < train.size(); i++){
 		if(i != out){
-			for(int j = 0; j < featureSet.size(); j++){
-				dist += pow((train.at(i).features.at(fnum.at(j)) - featureSet.at(j)),2); 
+			for(int j = 0; j < fnum.size(); j++){
+				dist += pow((train.at(i).features.at(fnum.at(j)) - train.at(out).features.at(fnum.at(j))),2); 
 			}
 			if(dist < min){
 				min = dist;
-				id = train.at(i).id;
+				clsf = train.at(i).id;
 			}
 		}
 		dist = 0.0;
 			
 	}
-	return id;
+	return clsf;
 }
 
 double leaveOneOut(vector<Instance> train, vector<int> fnumber){
-	vector<double> temp; //variable to hold current features
 	double correct = 0.0;
-	double sz = static_cast<double>(train.size());
+	int sz = train.size();
 	double accuracy;
 	
-	for(int i = 0; i < train.size(); i++){
-		for(int j = 0; j < fnumber.size(); j++){
-			temp.push_back(train.at(i).features.at(fnumber.at(j)));
-		}
-		if(nearestNeighbor(i, temp, train, fnumber) == train.at(i).id){
+	for(int i = 0; i < sz; i++){
+		if(nearestNeighbor(i,train, fnumber) == train.at(i).id){
 			correct = correct + 1.000;
 		}
-		temp.clear();
 	}
-	accuracy = (correct/sz)*100.000;
+	accuracy = (correct/static_cast<double>(sz))*100.000;
 
 	cout << "Using feature(s) {"; 
 	for(int i = 0; i < fnumber.size(); i++){
@@ -99,30 +94,45 @@ double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 
 void forwardSelection(vector<Instance> instances){
 	vector<int> feat;
+	vector<int> bestFeat;
 	int siz = instances.at(0).features.size();
 	double max = 0;
-	double tmax;
 	double temp;
 	int best;
-
-	cout << "Running nearest neighbor with all features and leave-one-out evaluation.";
+	double curMax = 0;
+		
+	cout << "Beginning search." << endl << endl;
 	for(int i = 0; i < siz; i++){
-		feat.push_back(i);
-	}
-	tmax = leaveOneOut(instances, feat);
-	feat.clear();
-	cout << endl << "Beginning search." << endl << endl;
-	for(int i = 0; i < siz; i++){
-		feat.push_back(i);
-		temp = leaveOneOut(instances,feat);
-		if(temp > max){
-			max = temp;
-			best = i;
+		curMax = 0.0;
+		for(int j = 0; j < siz; j++){
+			if((count(bestFeat.begin(), bestFeat.end(),j)) == 0){
+				feat.push_back(j);
+				temp = leaveOneOut(instances,feat);
+				if(temp > curMax){
+					curMax = temp;
+					best = j;
+				}
+				feat.pop_back();
+			}
 		}
-		feat.pop_back();
+		if(curMax > max){
+			max = curMax;
+		}
+		else{
+			cout << "(Warning, Accuracy has decreased! Continue searching in case of local maxima)" << endl;
+		}
+		bestFeat.push_back(best);
+		feat.clear();
+		feat = bestFeat;
+		cout << "Feature set {";
+		for(int k = 0; k < bestFeat.size(); k++){
+			cout << bestFeat.at(k) + 1;
+			if(k != bestFeat.size()-1){
+				cout << ",";
+			}
+		}
+		cout << "} was best, accuracy is " << curMax << "%" << endl << endl;	
 	}
-	cout << endl << "Feature set {" << best+1 << "} was best, accuracy is " << max << "%" << endl;
-	
 } 
 
 int main(){
@@ -164,16 +174,6 @@ int main(){
 	
 	cout << "This dataset has " << train.at(0).features.size() << " features, with " << train.size() << " instances." << endl;
 	cout << endl;
-
-	/*cout << "testing nearest neighbor" << endl;
-	vector<double> f;
-	f.push_back(3.64);
-	f.push_back(3.51);
-	f.push_back(3.55);
-	f.push_back(3.13);
-
-	cout << "the nearest neighbor is: " << nearestNeighbor(f, train) << endl;*/
-
 	cout << "Please wait while I normalize the data.. ";
 
 	train = normalize(train);
@@ -186,8 +186,7 @@ int main(){
 
 	cin >> choice;
 	cout << endl;
-
-	forwardSelection(train);
+	forwardSelection(train);	
 	
 	return 1;
 }
