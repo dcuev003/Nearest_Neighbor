@@ -86,7 +86,7 @@ double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 			cout << ",";
 		}
 	}
-	cout << "} accuracy is " << setprecision(4) << accuracy << "%" << endl;
+	cout << "} accuracy is " << accuracy << "%" << endl;
 
 	return accuracy;
 		
@@ -169,7 +169,6 @@ int main(){
 	
 	while(getline(dat, line)){
 		stringstream ss(line);
-		
 		while(ss >> val){
 			data.push_back(val);
 		}
