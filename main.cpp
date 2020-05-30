@@ -66,7 +66,7 @@ int nearestNeighbor(int out, vector<double> featureSet, vector<Instance> train, 
 	return id;
 }
 
-double leaveOneOut(vector<double> fset, vector<Instance> train, vector<int> fnumber){
+double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 	vector<double> temp; //variable to hold current features
 	double correct = 0;
 	double sz = static_cast<double>(train.size());
@@ -77,15 +77,15 @@ double leaveOneOut(vector<double> fset, vector<Instance> train, vector<int> fnum
 			temp.push_back(train.at(i).features.at(fnumber.at(j)));
 		}
 		if(nearestNeighbor(i, temp, train, fnumber) == train.at(i).id){
-			correct++;
+			correct = correct + 1.000;
 		}
+		temp.clear();
 	}
-	
-	accuracy = correct/sz;
+	accuracy = (correct/sz)*100.000;
 
 	cout << "using feature(s) {"; 
 	for(int i = 0; i < fnumber.size(); i++){
-		cout << fnumber.at(i);
+		cout << fnumber.at(i)+1;
 		if(i != fnumber.size()-1){
 			cout << ",";
 		}
@@ -95,6 +95,8 @@ double leaveOneOut(vector<double> fset, vector<Instance> train, vector<int> fnum
 	return accuracy;
 		
 }
+
+void 
 
 int main(){
 	
@@ -150,11 +152,6 @@ int main(){
 	train = normalize(train);
 
 	cout << "Done!" << endl << endl;
-
-	for(int i = 0; i < train.size(); i++){
-		train.at(i).print();
-	}
-
 	cout << endl;
 	cout << "Type the number of the algorithm you want to run." << endl;
 	cout << "1) Forward selection" << endl << "2) Backward Elimination" << endl << endl;
@@ -162,7 +159,14 @@ int main(){
 
 	cin >> choice;
 	cout << "Running nearest neighbor with features, using leaving-one-out evaluation";
-	cout << endl;	
+	cout << endl;
+
+	vector<int> f;
+	f.push_back(0);
+	f.push_back(14);
+	f.push_back(26);
+
+	leaveOneOut(train, f);
 	
 	
 	return 1;
