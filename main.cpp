@@ -143,7 +143,67 @@ void forwardSelection(vector<Instance> instances){
                 }
         }
 	cout << "}, which has an accuracy of " << max << "%." << endl;
-} 
+}
+void backElim(vector<Instance> instances){
+	vector<int> feat;
+	vector<int> bestFeat;
+	vector<int> trueFeat;
+	int siz = instances.at(0).features.size();
+	double max = 0;
+	double temp;
+	int best;
+	double curMax = 0;
+	int t;
+	
+	cout << "Beginning search." << endl << endl;
+	for(int i = 0; i < siz; i++){
+		bestFeat.push_back(i);
+	}
+	max = leaveOneOut(instances, bestFeat);
+	cout << endl;
+	feat = bestFeat;
+	for(int i = 0; i < siz-1; i++){
+		curMax = 0.0;
+		for(int j = 0; j < feat.size(); j++){
+			if((count(feat.begin(), feat.end(),feat.at(j))) != 0){
+				t = feat.at(j);
+				feat.erase(remove(feat.begin(),feat.end(), t),feat.end());
+				temp = leaveOneOut(instances,feat);
+				if(temp > curMax){
+					curMax = temp;
+					best = t;
+				}
+				feat.push_back(t);
+			}
+		}
+		bestFeat.erase(remove(bestFeat.begin(),bestFeat.end(),best),bestFeat.end());
+		if(curMax > max){
+			max = curMax;
+			trueFeat = bestFeat;
+		}
+		else{
+			cout << "(Warning, Accuracy has decreased! Continue searching in case of local maxima)" << endl;
+		}
+		feat.clear();
+		feat = bestFeat;
+		cout << "Feature set {";
+		for(int k = 0; k < bestFeat.size(); k++){
+			cout << bestFeat.at(k) + 1;
+			if(k != bestFeat.size()-1){
+				cout << ",";
+			}
+		}
+		cout << "} was best, accuracy is " << curMax << "%" << endl << endl;	
+	}
+	cout << "Finished Search!! The best feature subset is {";
+	for(int l = 0; l < trueFeat.size(); l++){
+        	cout << trueFeat.at(l) + 1;
+        	if(l != trueFeat.size()-1){
+                	cout << ",";
+                }
+        }
+	cout << "}, which has an accuracy of " << max << "%." << endl;
+}  
 
 int main(){
 	
@@ -195,7 +255,12 @@ int main(){
 
 	cin >> choice;
 	cout << endl;
-	forwardSelection(train);	
+	if(choice == 1){
+		forwardSelection(train);
+	}
+	else{
+		backElim(train);
+	}	
 	
 	return 1;
 }
