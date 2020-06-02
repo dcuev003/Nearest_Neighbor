@@ -18,7 +18,6 @@ vector<Instance> normalize(vector<Instance> temp){
 	double stdDev = 0.0;
 	double var = 0.0;
 	double sz = static_cast<double>(temp.size());
-	
 	vector<Instance> ret = temp;
 	for(int i = 0; i < temp.at(0).features.size(); i++){
 		for(int j = 0; j < temp.size(); j++){
@@ -41,17 +40,13 @@ vector<Instance> normalize(vector<Instance> temp){
 		stdDev = 0.0;
 		var = 0.0;
 	}
-
-	return ret;   
-	
+	return ret;   	
 }
 
-int nearestNeighbor(int out, vector<Instance> train, vector<int> fnum){
-		
+int nearestNeighbor(int out, vector<Instance> train, vector<int> fnum){		
 	double min = DBL_MAX;
 	double dist = 0.0;
 	int clsf; //classification
-	
 	for(int i = 0; i < train.size(); i++){
 		if(i != out){
 			for(int j = 0; j < fnum.size(); j++){
@@ -67,19 +62,16 @@ int nearestNeighbor(int out, vector<Instance> train, vector<int> fnum){
 	}
 	return clsf;
 }
-
 double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 	double correct = 0.0;
 	int sz = train.size();
-	double accuracy;
-	
+	double accuracy;	
 	for(int i = 0; i < sz; i++){
 		if(nearestNeighbor(i,train, fnumber) == train.at(i).id){
 			correct = correct + 1.000;
 		}
 	}
 	accuracy = (correct/static_cast<double>(sz))*100.000;
-
 	cout << "Using feature(s) {"; 
 	for(int i = 0; i < fnumber.size(); i++){
 		cout << fnumber.at(i)+1;
@@ -88,11 +80,8 @@ double leaveOneOut(vector<Instance> train, vector<int> fnumber){
 		}
 	}
 	cout << "} accuracy is " << accuracy << "%" << endl;
-
-	return accuracy;
-		
+	return accuracy;		
 }
-
 void forwardSelection(vector<Instance> instances){
 	vector<int> feat;
 	vector<int> bestFeat;
@@ -101,8 +90,7 @@ void forwardSelection(vector<Instance> instances){
 	double max = 0;
 	double temp;
 	int best;
-	double curMax = 0;
-		
+	double curMax = 0;		
 	cout << "Beginning search." << endl << endl;
 	for(int i = 0; i < siz; i++){
 		curMax = 0.0;
@@ -208,31 +196,23 @@ void backElim(vector<Instance> instances){
 }  
 
 int main(){
-	
 	cout << "Welcome to Daniel Cueva's Feature Selection Algorithm." << endl;
 	cout << "Type in the name of the file to test: ";
-
 	double val;
 	vector <double> data;
 	vector <Instance> train;
-
 	string fname; //variable for file name
 	int choice;
 	cin >> fname;
-
 	cout << fname << endl << endl;
-
 	ifstream dat;
-
 	dat.open(fname.c_str());
-	
 	if(!dat.is_open()){
 		cout << "error opening file" << endl;
 		exit(1);
 	}
 	string line;
 	Instance *temp;
-	
 	while(getline(dat, line)){
 		stringstream ss(line);
 		while(ss >> val){
@@ -243,22 +223,16 @@ int main(){
 		data.clear();
 		train.push_back(*temp);
 		delete temp;
-	}
-			
+	}	
 	dat.close();
-	
 	cout << "This dataset has " << train.at(0).features.size() << " features, with " << train.size() << " instances." << endl;
 	cout << endl;
 	cout << "Please wait while I normalize the data.. ";
-
 	train = normalize(train);
-
 	cout << "Done!" << endl << endl;
 	cout << endl;
 	cout << "Type the number of the algorithm you want to run." << endl;
 	cout << "1) Forward selection" << endl << "2) Backward Elimination" << endl << endl;
-
-
 	cin >> choice;
 	cout << endl;
 	if(choice == 1){
