@@ -9,6 +9,7 @@
 #include "instance.cpp"
 #include <algorithm>
 #include <float.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 vector<Instance> normalize(vector<Instance> temp){
@@ -145,16 +146,14 @@ void forwardSelection(vector<Instance> instances){
 	cout << "}, which has an accuracy of " << max << "%." << endl;
 }
 void backElim(vector<Instance> instances){
-	vector<int> feat;
-	vector<int> bestFeat;
-	vector<int> trueFeat;
+	vector<int> feat; //vector to hold each different set of features
+	vector<int> bestFeat; //vector holds current best feature of iteration
+	vector<int> trueFeat; //vector holds best feature set after algorithm is completed
 	int siz = instances.at(0).features.size();
 	double max = 0;
 	double temp;
 	int best;
 	double curMax = 0;
-	int t;
-	
 	cout << "Beginning search." << endl << endl;
 	for(int i = 0; i < siz; i++){
 		bestFeat.push_back(i);
@@ -162,23 +161,26 @@ void backElim(vector<Instance> instances){
 	max = leaveOneOut(instances, bestFeat);
 	cout << endl;
 	feat = bestFeat;
+	trueFeat = feat;
 	for(int i = 0; i < siz-1; i++){
 		curMax = 0.0;
-		for(int j = 0; j < feat.size(); j++){
-			if((count(feat.begin(), feat.end(),feat.at(j))) != 0){
-				t = feat.at(j);
-				feat.erase(remove(feat.begin(),feat.end(), t),feat.end());
+		for(int j = 0; j < siz; j++){
+			//check if element to remove is in vector
+			if((count(feat.begin(), feat.end(),j)) != 0){
+				feat.erase(remove(feat.begin(),feat.end(),j), feat.end());
 				temp = leaveOneOut(instances,feat);
 				if(temp > curMax){
 					curMax = temp;
-					best = t;
+					best = j;
 				}
-				feat.push_back(t);
+				feat.push_back(j);
 			}
 		}
-		bestFeat.erase(remove(bestFeat.begin(),bestFeat.end(),best),bestFeat.end());
-		if(curMax > max){
+		//remove best feature
+		bestFeat.erase(remove(bestFeat.begin(),bestFeat.end(), best),bestFeat.end());
+		if(curMax >= max){
 			max = curMax;
+			trueFeat.clear();
 			trueFeat = bestFeat;
 		}
 		else{
@@ -224,6 +226,10 @@ int main(){
 
 	dat.open(fname.c_str());
 	
+	if(!dat.is_open()){
+		cout << "error opening file" << endl;
+		exit(1);
+	}
 	string line;
 	Instance *temp;
 	
