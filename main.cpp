@@ -223,7 +223,8 @@ int main(){
 		data.clear();
 		train.push_back(*temp);
 		delete temp;
-	}	
+	}
+		
 	dat.close();
 	cout << "This dataset has " << train.at(0).features.size() << " features, with " << train.size() << " instances." << endl;
 	cout << endl;
